@@ -79,10 +79,11 @@ module CarrierWave
           else
             uri = @connection.generate_uri(path)
             if sign_url?(options)
+              sas_options = options.delete(:sas_options) || {}
               @signer.signed_uri(uri, false, { permissions: 'r',
                                                resource: 'b',
                                                start: 1.minute.ago.utc.iso8601,
-                                               expiry: expires_at}).to_s
+                                               expiry: expires_at}.merge(sas_options)).to_s
             else
               uri.to_s
             end
